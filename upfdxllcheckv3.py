@@ -1,8 +1,6 @@
 #! /usr/bin/env python3
 # ! -*- coding: utf-8 -*-
-# yaozhengyi.ah@chinatelecom Anhui Usage scence
 # Compare 5G SA UPF(SHOW L34FILTER; SHOW L34FILTERGROUP; SHOW L7FILTER;SHOW L7FILTERGROUP) to JT rule xlsx file
-# Thanks to wellmaster(lizhao.gx@chinatelecom) for the inspiration
 # (DONE) 20210324 input file from upf
 # (DONE) 20210329 get mapping info from L34/L7FILTERGROUP_INFO to L34/L7FILTER_INFO
 # (DONE) 20210329 check current upf l34 to find duplicated rules (per rg )
