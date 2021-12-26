@@ -1,41 +1,61 @@
-5G SA 定向流量脚本生成工具（ZTE）
+#5G SA定向流量配置辅助工具   
+适用于中兴5G SA核心网设备UPF网元  
+适用于存量RG规则的**增量/全量**更新   
+如新增RG，需要额外增加配置
+##运行环境
+Python3.X  
+netaddr >= 0.7.19  
+openpyxl >= 3.0.0  
 
-一、	运行环境
+##场景
+增量更新某个RG的定向流量规则。  
+>upfdxllloose.py  
 
-Python3.9
-需额外安装netaddr和openpyxl模块。其中netaddr模块用于IP地址处理（判断IP异常，IPv4/IPv6，地址重复），openpyxl模块用于excel文件读取。（建议IDE使用PyCharm）
+全量更新某个RG的定向流量规则。  
+>upfdxllstrict.py   
 
-二、	运行方法
+##运行方法  
 
-1.	抓取UPF上的现网规则
-从UPF上分别抓取SHOW L34FILTER; SHOW L34FILTERGROUP两条命令的输出结果，将CSV文件放到Python程序目录下，确保程序目录下存在“rules”文件夹
-2.	检查集团下发的定向流量规则表格
-确认集团表格为xlsx格式，将excel文件放到Python程序相同目录下。
-3.	修改入参后运行
-修改程序中的入参文件改为集团下发的定向流量规则文件名。认为集团提供的是全量数据，对旧规则有而集团无的L34规则不删除。
-4.	运行程序
-会检测UPF存量规则是否存在重复，不输出去重脚本。在rules目录会输出配置脚本。
+###1.抓取UPF上的现网规则  
+>从每台UPF上分别抓取SHOW L34FILTER//L34FILTERGROUP/L7FILTER/L7FILTERGROUP四条命令的输出结果   
+将输出的CSV文件放到Python程序目录下的cur目录  
+按照upfXXX格式命名 
+4个规则文件放在对应UPF目录下
 
-三、	建议事项
+###2.检查定向流量规则表格  
 
-1.	规则和规则组规范写法
+>确认xlsx格式的表格放到Python程序相同目录下  
 
-  l34filername:l34_f_{RG}_{YYYYMMDD}_{NUM}
+###3.检查输出目录
+a)	增量更新场景
+确保程序目录下存在“rules”文件夹
+ 
+b)	全量更新场景
+确保程序目录下存在“allrules”文件夹
+ 
+###4. 修改入参后运行  
+修改对应行的定向流量规则文件名    
+增量对旧规则有而表格无的L34/L7规则不删除   
+增量不会/会检测L34/L7规则是否存在重复 **flag_chk_dupl**  
+增量/存量在对应输出目录输出对应UPF配置脚本
 
-  l7filername:l7_f_{RG}_{YYYYMMDD}_{NUM}
+##建议事项  
 
-  l34filtergrp:l34_g_{RG}_1
+###1.规则和规则组写法  
 
-  l7filtergrp:l7_g_{RG}_1
+|规则名|写法|
+|:----:|:----:|
+|l34filername|l34\_f\_\{RG\}\_\{YYYYMMDD\}\_\{NUM\}|
+|l7filername|l7\_f\_\{RG\}\_\{YYYYMMDD\}\_\{NUM\}|
+|l34filtergrp|l34\_g\_\{RG\}\_1| 
+|l7filtergrp|l7\_g\_\{RG\}\_1|   
 
-  RG：9-10位长度的整数
+###2.RG：9-10位长度的整数  
+###3.YYYYMMDD: 8位长度年月日  
+###4.NUM：四位长度整数，不足四位前补0  
 
-  YYYYMMDD: 8位长度年月日
+##注意事项
 
-  NUM：三位长度整数，不足三位前补0
+现网UPF规则差异较大建议全量更新(慎重)
 
 
-四、	注意事项
-
-仅适用于中兴核心网设备
-仅适用于存量RG规则的更新。如新增RG，需要额外配置。
